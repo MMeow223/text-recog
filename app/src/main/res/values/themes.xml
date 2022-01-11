@@ -1,0 +1,10 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.TextRecognitionApp" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">#1F3C88</item>
+        <item name="colorPrimaryDark">#070D59</item>
+        <item name="colorAccent">#070D59</item>
+        <!-- Customize your theme here. -->
+    </style>
+</resources>

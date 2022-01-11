@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Repositories/text-recognition-app/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.28489583333333335" />
+        <entry key="..\:/Repositories/text-recognition-app/app/src/main/res/drawable/button_style.xml" value="0.28489583333333335" />
+        <entry key="..\:/Repositories/text-recognition-app/app/src/main/res/drawable/ic_launcher_background.xml" value="0.28489583333333335" />
+        <entry key="..\:/Repositories/text-recognition-app/app/src/main/res/layout/activity_form.xml" value="0.22" />
+        <entry key="..\:/Repositories/text-recognition-app/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Repositories/text-recognition-app/app/src/main/res/layout/progressbar_layout.xml" value="0.18" />
+        <entry key="..\:/Repositories/text-recognition-app/app/src/main/res/xml/file_paths.xml" value="0.22871376811594202" />
+        <entry key="..\:/Ubisson/text-recognition-app-main/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.278125" />
+        <entry key="..\:/Ubisson/text-recognition-app-main/app/src/main/res/drawable/button_style.xml" value="0.225" />
+        <entry key="..\:/Ubisson/text-recognition-app-main/app/src/main/res/drawable/ic_launcher_background.xml" value="0.278125" />
+        <entry key="..\:/Ubisson/text-recognition-app-main/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Ubisson/text-recognition-app-main/app/src/main/res/layout/progressbar_layout.xml" value="0.33" />
+        <entry key="..\:/Ubisson/text-recognition-app-main/app/src/main/res/layout/toolbar_layout.xml" value="0.33" />
+        <entry key="..\:/Ubisson/text-recognition-app-main/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.278125" />
+        <entry key="..\:/Ubisson/text-recognition-app-main/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.278125" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.22" />
+      </ProjectState>
+    </option>
+  </component>
+</project>
