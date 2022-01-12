@@ -83,12 +83,12 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:focusable="true"
+                android:hint="@string/time_hint"
                 android:focusableInTouchMode="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="@string/time_hint"
                     android:paddingStart="20dp"
                     android:paddingTop="20dp"
                     android:paddingEnd="20dp"
@@ -104,12 +104,12 @@
                 android:layout_above="@id/resultView1"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="10dp"
+                android:hint="@string/date_hint"
                 android:layout_marginEnd="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="@string/date_hint"
                     android:paddingStart="20dp"
                     android:paddingTop="20dp"
                     android:paddingEnd="20dp"
@@ -125,12 +125,12 @@
                 android:layout_above="@+id/resultView2"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="10dp"
+                android:hint="@string/a1c_hint_1"
                 android:layout_marginEnd="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="@string/a1c_hint_1"
                     android:paddingStart="20dp"
                     android:paddingTop="20dp"
                     android:paddingEnd="20dp"
@@ -146,12 +146,12 @@
                 android:layout_above="@+id/lotView"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="10dp"
+                android:hint="@string/a1c_hint_2"
                 android:layout_marginEnd="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="@string/a1c_hint_2"
                     android:paddingStart="20dp"
                     android:paddingTop="20dp"
                     android:paddingEnd="20dp"
@@ -168,12 +168,12 @@
                 android:layout_above="@id/instIdView"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="10dp"
+                android:hint="@string/lot_hint"
                 android:layout_marginEnd="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="@string/lot_hint"
                     android:paddingStart="20dp"
                     android:paddingTop="20dp"
                     android:paddingEnd="20dp"
@@ -189,12 +189,12 @@
                 android:layout_above="@id/testIdView"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="10dp"
+                android:hint="@string/inst_id_hint"
                 android:layout_marginEnd="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="@string/inst_id_hint"
                     android:paddingStart="20dp"
                     android:paddingTop="20dp"
                     android:paddingEnd="20dp" />
@@ -208,12 +208,12 @@
                 android:layout_above="@id/operatorView"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="10dp"
+                android:hint="@string/test_id_hint"
                 android:layout_marginEnd="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="@string/test_id_hint"
                     android:paddingStart="20dp"
                     android:paddingTop="20dp"
                     android:paddingEnd="20dp"
@@ -229,12 +229,12 @@
                 android:layout_above="@id/submitBtn"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="10dp"
+                android:hint="@string/operator_hint"
                 android:layout_marginEnd="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="@string/operator_hint"
                     android:paddingStart="20dp"
                     android:paddingTop="20dp"
                     android:paddingEnd="20dp"/>
