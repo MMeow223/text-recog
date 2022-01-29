@@ -4,16 +4,23 @@
     // String values for Main Activity
     <string name="image_description">View that displays captured image</string>
     <string name="take_pic_btn_text">Scan The Slip Now!</string>
-    <string name="form_title">HbA1c Result Data</string>
-    <string name="time_hint">Time</string>
+    <string name="form_title">Quo-Lab A1C</string>
+    <string name="datetime_hint">Date Time</string>
     <string name="date_hint">Date</string>
-    <string name="a1c_hint_1">A1C (%)</string>
-    <string name="a1c_hint_2">A1C (mmol/mol)</string>
+    <string name="a1c_hint_1">A1C (% / mmol/mol)</string>
+<!--    <string name="a1c_hint_2">A1C (mmol/mol)</string>-->
     <string name="lot_hint">Lot View</string>
     <string name="inst_id_hint">Inst ID</string>
     <string name="test_id_hint">Test ID</string>
     <string name="operator_hint">Operator</string>
     <string name="submit_btn_text">Record It</string>
-    <string name="toolbar_title">HbA1c Image Extractor</string>
+    <string name="toolbar_title">HbA1c Record</string>
+    <string name="history_toolbar_title">History Records</string>
+    <string name="history_record_table_head_date"><u>Date</u></string>
+    <string name="history_record_table_head_time"><u>Time</u></string>
+    <string name="history_record_table_head_mmol"><u>%/mmol/mol</u></string>
+    <string name="history_record_table_head_test_id"><u>Test ID</u></string>
+    <string name="history_record_table_head_lot"><u>Lot</u></string>
+    <string name="history_record_table_head_inst_id"><u>Inst Id</u></string>
 
 </resources>

@@ -1,5 +1,6 @@
 package com.example.textrecognitionapp;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,6 +12,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
@@ -24,6 +26,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -45,7 +48,8 @@ import java.util.stream.Collectors;
 public class MainActivity extends AppCompatActivity {
 
     // Variable declaration
-    private Button captureImageBtn;
+    private Button captureImageBtn,submitBtn;
+    private ImageButton historyRecordBtn;
     private ImageView capturedImage;
     private Bitmap imageBitmap;
     private Bitmap imageBitmapForProcess;
@@ -56,11 +60,11 @@ public class MainActivity extends AppCompatActivity {
     private final String[] unwantedWords = {"Time", "Time:", "Date", "Date:", "Result", "Result:", "DCCT", "IFCC", "Lot", "Lot:", "Inst ID", "Inst ID ","Inst ID:", "Test ID", "Test ID:", "Operator", "Operator:"};
 
     private final ArrayList<TextInputLayout> textInputLayouts = new ArrayList<>();
-    private TextInputLayout timeView, dateView, resultView1, resultView2, lotView, instIdView, testIdView, operatorView;
-    private Button submitBtn;
+    private TextInputLayout dateTimeView, dateView, resultView1, resultView2, lotView, instIdView, testIdView, operatorView;
 
     private String mCurrentPhotoPath;
     private boolean isProgressShown = false;
+    private boolean submitVerifyPass = false;
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
     @Override
@@ -82,21 +86,22 @@ public class MainActivity extends AppCompatActivity {
         captureImageBtn = findViewById(R.id.captureImageBtn);
         imageBitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.placeholder);
         capturedImage.setImageBitmap(imageBitmap);
-        timeView = findViewById(R.id.timeView);
-        dateView = findViewById(R.id.dateView);
+        dateTimeView = findViewById(R.id.dateTimeView);
+//        dateView = findViewById(R.id.dateView);
         resultView1 = findViewById(R.id.resultView1);
-        resultView2 = findViewById(R.id.resultView2);
+//        resultView2 = findViewById(R.id.resultView2);
         lotView = findViewById(R.id.lotView);
         instIdView = findViewById(R.id.instIdView);
         testIdView = findViewById(R.id.testIdView);
         operatorView = findViewById(R.id.operatorView);
         submitBtn = findViewById(R.id.submitBtn);
+        historyRecordBtn = findViewById(R.id.historyRecordButton);
 
         // Adding text input layout views into array
-        textInputLayouts.add(timeView);
-        textInputLayouts.add(dateView);
+        textInputLayouts.add(dateTimeView);
+//        textInputLayouts.add(dateView);
         textInputLayouts.add(resultView1);
-        textInputLayouts.add(resultView2);
+//        textInputLayouts.add(resultView2);
         textInputLayouts.add(lotView);
         textInputLayouts.add(instIdView);
         textInputLayouts.add(testIdView);
@@ -104,12 +109,17 @@ public class MainActivity extends AppCompatActivity {
 
         // Calls camera activity function when 'Take Picture' button is pressed
         captureImageBtn.setOnClickListener(v -> {
-                rotation = 0;
-                dispatchTakePictureIntent();
+            submitVerifyPass = false;
+            rotation = 0;
+            dispatchTakePictureIntent();
         });
 
         submitBtn.setOnClickListener(v -> {
             submitValidation();
+        });
+
+        historyRecordBtn.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, HistoryRecordActivity.class));
         });
     }
 
@@ -188,6 +198,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -208,6 +219,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     // 'extractTextFromImage()', & 'getImageText()' taken from https://www.youtube.com/watch?v=fmTlgwgKJmE
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void extractTextFromImage() {
         // Show progress bar
         showProgressView();
@@ -238,6 +250,7 @@ public class MainActivity extends AppCompatActivity {
         // Remove everything before "Quo-Lab"
         for(String word : words){
             if(word.contains("Quo-Lab")){
+                submitVerifyPass = true;
                 words.subList(0, words.indexOf(word)).clear();
                 if(words.indexOf(word) == 0){
                     bashNumber = word.replace("Quo-Lab ","");
@@ -287,6 +300,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     // Function to validate data from Firebase Vision ML Kit and set values to text input layouts
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void getImageText(FirebaseVisionText firebaseVisionText) {
         String lines = getRawString(firebaseVisionText);
 
@@ -306,10 +320,33 @@ public class MainActivity extends AppCompatActivity {
             if(words.size() == 7){
                 hideProgressView();
                 removeUnitFromValue();
+                mergeField();
                 failExtractMsg();
                 fillValueIntoInputField();
             }
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void mergeField(){
+        if(!words.get(0).equals("")){
+            ArrayList<String> tempList =new ArrayList<>(Arrays.asList(words.get(0).split("")));
+
+            if(words.get(0).contains("pmm")||words.get(0).contains("pmn")||words.get(0).contains("amm")||words.get(0).contains("amn")){
+                tempList.remove(tempList.size()-1);
+            }
+
+            words.set(0,String.join("", tempList));
+            words.set(0, words.get(1)+ " "+ words.get(0));
+        }
+        if(!words.get(1).equals("")){
+            words.set(1, words.get(2)+ " / "+words.get(3));
+        }
+        words.set(2, words.get(4));
+        words.set(3, words.get(5));
+        words.set(4, words.get(6));
+        words.remove(words.size()-1);
+        words.remove(words.size()-1);
     }
 
     private void removeUnitFromValue(){
@@ -333,14 +370,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void failExtractMsg(){
         int count = 0;
+        int allCount = 5;
         for(String word : words){
-            count += (word=="")?1:0;
+            count += (word.equals(""))?1:0;
         }
-        if(count==7){
+        if(count==allCount){
             Toast.makeText(getApplicationContext(), "Extract Fail: There is no text found.\n Please retake the picture.", Toast.LENGTH_LONG).show();
         }
-        else if(count>0 && count<7){
-            Toast.makeText(getApplicationContext(), "Extract Fail: There is only "+(7-count)+" field found.\n Please fill in manually for the remaining "+count+" field(s) or retake the picture.", Toast.LENGTH_LONG).show();
+        else if(count>0 && count<allCount){
+            Toast.makeText(getApplicationContext(), "Extract Fail: There is only "+(allCount-count)+" field found.\n Please fill in manually for the remaining "+count+" field(s) or retake the picture.", Toast.LENGTH_LONG).show();
         }
         else{
             Toast.makeText(getApplicationContext(), "Text extracted successfully!", Toast.LENGTH_SHORT).show();
@@ -353,25 +391,26 @@ public class MainActivity extends AppCompatActivity {
 
         for(String word: words){
 
-            if(tempList.get(0) == ""){
+            if(tempList.get(0).equals("")){
                 tempList.set(0,filterTime(word));
+
             }
-            else if(tempList.get(1) == ""){
+            else if(tempList.get(1).equals("")){
                 tempList.set(1,filterDate(word));
             }
-            else if(tempList.get(2) == ""){
+            else if(tempList.get(2).equals("")){
                 tempList.set(2,filterA1CPercentage(word));
             }
-            else if(tempList.get(3) == ""){
+            else if(tempList.get(3).equals("")){
                 tempList.set(3,filterA1CMol(word));
             }
-            else if(tempList.get(4) == ""){
+            else if(tempList.get(4).equals("")){
                 tempList.set(4,filterLot(word));
             }
-            else if(tempList.get(5) == ""){
+            else if(tempList.get(5).equals("")){
                 tempList.set(5,filterInstID(word));
             }
-            else if(tempList.get(6) == ""){
+            else if(tempList.get(6).equals("")){
                 tempList.set(6,filterTestID(word));
             }
             else if(tempList.contains("") == false){
@@ -438,7 +477,10 @@ public class MainActivity extends AppCompatActivity {
         // Check for empty values in the text input layouts
         for(TextInputLayout til: textInputLayouts){
             String text = til.getEditText().getText().toString();
-            return (!text.equals(""));
+
+            if(text.equals("")){
+                return false;
+            }
         }
         return true;
     }
@@ -468,8 +510,14 @@ public class MainActivity extends AppCompatActivity {
     }
     private void submitValidation() {
         // Validate form values before submitting it to the database
+
         if (validateEachField()) {
-            submitValidationDialogBox();
+            if(!submitVerifyPass){
+                Toast.makeText(getApplicationContext(), "Submission Fail: Invalid record found, please make sure you slip is from 'Quo-Lab' machine", Toast.LENGTH_LONG).show();
+            }
+            else{
+                submitValidationDialogBox();
+            }
         } else {
             Toast.makeText(getApplicationContext(), "Submission Fail: There are empty values found, please make sure that they are filled in.", Toast.LENGTH_LONG).show();
         }

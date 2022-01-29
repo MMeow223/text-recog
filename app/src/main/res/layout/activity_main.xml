@@ -10,25 +10,20 @@
     android:orientation="vertical"
     >
 
-    <include layout="@layout/toolbar_layout" />
+    <include layout="@layout/main_toolbar_layout" />
 
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
-        >
-
+        android:layout_height="fill_parent"
+        android:background="@color/custom_grey">
 
         <LinearLayout
-            android:background="@color/custom_grey"
-
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            >
+            android:paddingRight="16dp">
 
             <ImageView
                 android:id="@+id/capturedImage"
@@ -39,8 +34,8 @@
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/image_description"
                 android:cropToPadding="true"
-                android:scaleType="fitCenter"
-                android:elevation="4dp"/>
+                android:elevation="4dp"
+                android:scaleType="fitCenter" />
 
             <Button
                 android:id="@+id/captureImageBtn"
@@ -71,175 +66,168 @@
                 android:text="@string/form_title"
                 android:textSize="20sp" />
 
-            <!--Time-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/timeView"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
 
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/dateView"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:focusable="true"
-                android:hint="@string/time_hint"
-                android:focusableInTouchMode="true">
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/dateTimeView"
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingStart="20dp"
-                    android:paddingTop="20dp"
-                    android:paddingEnd="20dp"
-                    android:inputType="time"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/resultView1"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight=".5"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:hint="@string/datetime_hint"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/resultView1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-            <!--Date-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/dateView"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@id/resultView1"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="10dp"
-                android:hint="@string/date_hint"
-                android:layout_marginEnd="10dp">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="time"
+                        android:paddingStart="20dp"
+                        android:paddingTop="20dp"
+                        android:paddingEnd="20dp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingStart="20dp"
-                    android:paddingTop="20dp"
-                    android:paddingEnd="20dp"
-                    android:inputType="date"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/resultView1"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:hint="@string/a1c_hint_1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/dateTimeView"
+                    app:layout_constraintTop_toTopOf="parent">
 
-            <!--AIC%-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/resultView1"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/resultView2"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="10dp"
-                android:hint="@string/a1c_hint_1"
-                android:layout_marginEnd="10dp">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="numberDecimal"
+                        android:paddingStart="20dp"
+                        android:paddingTop="20dp"
+                        android:paddingEnd="20dp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingStart="20dp"
-                    android:paddingTop="20dp"
-                    android:paddingEnd="20dp"
-                    android:inputType="numberDecimal"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!--AICmol-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/resultView2"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/lotView"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="10dp"
-                android:hint="@string/a1c_hint_2"
-                android:layout_marginEnd="10dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingStart="20dp"
-                    android:paddingTop="20dp"
-                    android:paddingEnd="20dp"
-                    android:inputType="numberDecimal"/>
-            </com.google.android.material.textfield.TextInputLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            <!--Lot-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/lotView"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@id/instIdView"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="10dp"
-                android:hint="@string/lot_hint"
-                android:layout_marginEnd="10dp">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingStart="20dp"
-                    android:paddingTop="20dp"
-                    android:paddingEnd="20dp"
-                    android:inputType="number"/>
-            </com.google.android.material.textfield.TextInputLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
 
-            <!--InstID-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/instIdView"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@id/testIdView"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="10dp"
-                android:hint="@string/inst_id_hint"
-                android:layout_marginEnd="10dp">
+                <!--Lot-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lotView"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:hint="@string/lot_hint"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/instIdView"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingStart="20dp"
-                    android:paddingTop="20dp"
-                    android:paddingEnd="20dp" />
-            </com.google.android.material.textfield.TextInputLayout>
-            <!--TestID-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/testIdView"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@id/operatorView"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="10dp"
-                android:hint="@string/test_id_hint"
-                android:layout_marginEnd="10dp">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="number"
+                        android:paddingStart="20dp"
+                        android:paddingTop="20dp"
+                        android:paddingEnd="20dp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingStart="20dp"
-                    android:paddingTop="20dp"
-                    android:paddingEnd="20dp"
-                    android:inputType="number"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                <!--InstID-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/instIdView"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:hint="@string/inst_id_hint"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/lotView"
+                    app:layout_constraintTop_toTopOf="parent">
 
-            <!--Operator-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/operatorView"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@id/submitBtn"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="10dp"
-                android:hint="@string/operator_hint"
-                android:layout_marginEnd="10dp">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingStart="20dp"
+                        android:paddingTop="20dp"
+                        android:paddingEnd="20dp" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingStart="20dp"
-                    android:paddingTop="20dp"
-                    android:paddingEnd="20dp"/>
-            </com.google.android.material.textfield.TextInputLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
 
+                <!--TestID-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/testIdView"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:hint="@string/test_id_hint"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/operatorView"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="number"
+                        android:paddingStart="20dp"
+                        android:paddingTop="20dp"
+                        android:paddingEnd="20dp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--Operator-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/operatorView"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:hint="@string/operator_hint"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/testIdView"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingStart="20dp"
+                        android:paddingTop="20dp"
+                        android:paddingEnd="20dp" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <Button
                 android:id="@+id/submitBtn"
@@ -249,8 +237,6 @@
                 android:layout_margin="10dp"
                 android:background="@drawable/button_style"
                 android:text="@string/submit_btn_text" />
-
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

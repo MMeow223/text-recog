@@ -20,18 +20,6 @@
             android:layout_height="wrap_content">
 
             <ImageButton
-                android:id="@+id/backButton"
-                android:layout_width="40dp"
-                android:layout_height="35dp"
-                android:background="@null"
-                android:src="@drawable/back_icon"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-            </ImageButton>
-
-            <ImageButton
                 android:id="@+id/historyRecordButton"
                 android:layout_width="40dp"
                 android:layout_height="35dp"
