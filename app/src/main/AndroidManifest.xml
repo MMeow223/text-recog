@@ -45,6 +45,11 @@
             android:exported="true"
             android:configChanges="keyboardHidden|orientation">
         </activity>
+        <activity android:name=".PopOutWindow"
+            android:exported="true"
+            android:configChanges="keyboardHidden|orientation">
+
+        </activity>
     </application>
 
 </manifest>

@@ -21,8 +21,6 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.commons.io.output.ByteArrayOutputStream;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.text.FirebaseVisionText;
@@ -41,26 +40,24 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity {
 
-    // Variable declaration
-    private Button captureImageBtn,submitBtn;
-    private ImageButton historyRecordBtn;
     private ImageView capturedImage;
     private Bitmap imageBitmap;
     private Bitmap imageBitmapForProcess;
     private ViewGroup progressView;
-    private String bashNumber;
     private int rotation = 0;
     private ArrayList<String> words = new ArrayList<>();
     private final String[] unwantedWords = {"Time", "Time:", "Date", "Date:", "Result", "Result:", "DCCT", "IFCC", "Lot", "Lot:", "Inst ID", "Inst ID ","Inst ID:", "Test ID", "Test ID:", "Operator", "Operator:"};
+    private DBHelper db;
 
     private final ArrayList<TextInputLayout> textInputLayouts = new ArrayList<>();
-    private TextInputLayout dateTimeView, dateView, resultView1, resultView2, lotView, instIdView, testIdView, operatorView;
 
     private String mCurrentPhotoPath;
     private boolean isProgressShown = false;
@@ -72,36 +69,28 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (Build.VERSION.SDK_INT >= 21) {
-            Window window = this.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.custom_dark_blue));
-        }
         // Hides progress bar by default
         hideProgressView();
 
         // Linking variables to XML
         capturedImage = findViewById(R.id.capturedImage);
-        captureImageBtn = findViewById(R.id.captureImageBtn);
+        // Variable declaration
+        Button captureImageBtn = findViewById(R.id.captureImageBtn);
         imageBitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.placeholder);
         capturedImage.setImageBitmap(imageBitmap);
-        dateTimeView = findViewById(R.id.dateTimeView);
-//        dateView = findViewById(R.id.dateView);
-        resultView1 = findViewById(R.id.resultView1);
-//        resultView2 = findViewById(R.id.resultView2);
-        lotView = findViewById(R.id.lotView);
-        instIdView = findViewById(R.id.instIdView);
-        testIdView = findViewById(R.id.testIdView);
-        operatorView = findViewById(R.id.operatorView);
-        submitBtn = findViewById(R.id.submitBtn);
-        historyRecordBtn = findViewById(R.id.historyRecordButton);
+        TextInputLayout dateTimeView = findViewById(R.id.dateTimeView);
+        TextInputLayout resultView1 = findViewById(R.id.resultView1);
+        TextInputLayout lotView = findViewById(R.id.lotView);
+        TextInputLayout instIdView = findViewById(R.id.instIdView);
+        TextInputLayout testIdView = findViewById(R.id.testIdView);
+        TextInputLayout operatorView = findViewById(R.id.operatorView);
+        Button submitBtn = findViewById(R.id.submitBtn);
+        ImageButton historyRecordBtn = findViewById(R.id.historyRecordButton);
+        db = new DBHelper(this);
 
         // Adding text input layout views into array
         textInputLayouts.add(dateTimeView);
-//        textInputLayouts.add(dateView);
         textInputLayouts.add(resultView1);
-//        textInputLayouts.add(resultView2);
         textInputLayouts.add(lotView);
         textInputLayouts.add(instIdView);
         textInputLayouts.add(testIdView);
@@ -114,13 +103,9 @@ public class MainActivity extends AppCompatActivity {
             dispatchTakePictureIntent();
         });
 
-        submitBtn.setOnClickListener(v -> {
-            submitValidation();
-        });
+        submitBtn.setOnClickListener(v -> submitValidation());
 
-        historyRecordBtn.setOnClickListener(v -> {
-            startActivity(new Intent(MainActivity.this, HistoryRecordActivity.class));
-        });
+        historyRecordBtn.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, HistoryRecordActivity.class)));
     }
 
     // 'dispatchTakePictureIntent()', 'createImageFile()', 'galleryAddPic()', 'setPic()', and 'onActivityResult()' taken from https://developer.android.com/training/camera/photobasics
@@ -237,9 +222,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private Bitmap rotateImage(Bitmap img, int degree) {
+    private Bitmap rotateImage(Bitmap img) {
         Matrix matrix = new Matrix();
-        matrix.postRotate(degree);
+        matrix.postRotate(90);
         Bitmap rotatedImg = Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(), matrix, true);
         img.recycle();
         rotation += 90;
@@ -253,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
                 submitVerifyPass = true;
                 words.subList(0, words.indexOf(word)).clear();
                 if(words.indexOf(word) == 0){
-                    bashNumber = word.replace("Quo-Lab ","");
+                    word.replace("Quo-Lab ", "");
                     words.remove(word);
                 }
                 break;
@@ -282,22 +267,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String getRawString(FirebaseVisionText firebaseVisionText){
-        String lines = "";
+        StringBuilder lines = new StringBuilder();
         for (FirebaseVisionText.Block block: firebaseVisionText.getBlocks()) {
-            lines += block.getText();
-            if(!(lines.toCharArray()[lines.length()-1] == 'n' && lines.toCharArray()[lines.length()-2] == '\\')){
+            lines.append(block.getText());
+            if(!(lines.toString().toCharArray()[lines.length()-1] == 'n' && lines.toString().toCharArray()[lines.length()-2] == '\\')){
                 // "\n" is chosen for the originally "next line" detected in the image
-                lines += "\n";
+                lines.append("\n");
             }
         }
-        return lines;
+        return lines.toString();
     }
 
     private void splitRawString(String lines){
         // Convert String to Array and add into List
-        for(String word : lines.split("\\n")){
-            words.add(word);
-        }
+        Collections.addAll(words, lines.split("\\n"));
     }
     // Function to validate data from Firebase Vision ML Kit and set values to text input layouts
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -312,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
 
         // First condition here means [if (joins of values in "words" ArrayList) equal to "" ]
         if(words.stream().map(Object::toString).collect(Collectors.joining("")).equals("") && rotation<=360){
-            imageBitmapForProcess = rotateImage(imageBitmapForProcess,90);
+            imageBitmapForProcess = rotateImage(imageBitmapForProcess);
             extractTextFromImage();
         }
         else{
@@ -364,7 +347,7 @@ public class MainActivity extends AppCompatActivity {
     private void fillValueIntoInputField(){
         // Loop through word list and fills the text input layouts
         for (int i = 0; i < words.size(); i++) {
-            textInputLayouts.get(i).getEditText().setText(words.get(i));
+            Objects.requireNonNull(textInputLayouts.get(i).getEditText()).setText(words.get(i));
         }
     }
 
@@ -413,7 +396,7 @@ public class MainActivity extends AppCompatActivity {
             else if(tempList.get(6).equals("")){
                 tempList.set(6,filterTestID(word));
             }
-            else if(tempList.contains("") == false){
+            else if(!tempList.contains("")){
                 break;
             }
         }
@@ -476,7 +459,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean validateEachField(){
         // Check for empty values in the text input layouts
         for(TextInputLayout til: textInputLayouts){
-            String text = til.getEditText().getText().toString();
+            String text = Objects.requireNonNull(til.getEditText()).getText().toString();
 
             if(text.equals("")){
                 return false;
@@ -492,21 +475,41 @@ public class MainActivity extends AppCompatActivity {
         // Uploads data to database (To be implemented) & resets image and text input layout values to default values
         builder.setPositiveButton("Confirm", (dialog, which) -> {
             dialog.cancel();
-            Toast.makeText(getApplicationContext(), "Uploading data to database.", Toast.LENGTH_SHORT).show();
-            capturedImage.setImageResource(R.drawable.placeholder);
-            for (int i = 0; i < textInputLayouts.size(); i++) {
-                textInputLayouts.get(i).getEditText().setText("");
+
+            boolean submitSuccess = submitRecordToDatabase();
+            if(submitSuccess){
+                capturedImage.setImageResource(R.drawable.placeholder);
+                for (int i = 0; i < textInputLayouts.size(); i++) {
+                    Objects.requireNonNull(textInputLayouts.get(i).getEditText()).setText("");
+                }
+                Toast.makeText(getApplicationContext(), "Upload record to database successfully!", Toast.LENGTH_SHORT).show();
             }
-            submitRecordToDatabase();
+            else{
+                Toast.makeText(getApplicationContext(), "Fail to upload record to database. Are you submitting a repeated slip?", Toast.LENGTH_SHORT).show();
+            }
         });
         // Closes alert dialog
-        builder.setNegativeButton("Go Back", (dialog, which) -> { dialog.cancel(); });
+        builder.setNegativeButton("Go Back", (dialog, which) -> dialog.cancel());
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
-    private void submitRecordToDatabase(){
+    private boolean submitRecordToDatabase(){
         // TODO to be implement (submit to database)
+
+        ArrayList<String> tempArray = new ArrayList<>();
+        for(TextInputLayout til:textInputLayouts){
+            tempArray.add(Objects.requireNonNull(til.getEditText()).getText().toString());
+        }
+
+        byte[] imageByteArray = convertBitmapToByteArray();
+
+        return db.insertSlipResultToDatabase(tempArray.get(0),tempArray.get(1),tempArray.get(2),tempArray.get(3),tempArray.get(4),tempArray.get(5),imageByteArray);
+    }
+    private byte[] convertBitmapToByteArray(){
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG,100,stream);
+        return stream.toByteArray();
     }
     private void submitValidation() {
         // Validate form values before submitting it to the database
@@ -524,6 +527,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Function to show the progress spinner view
+    @SuppressLint("InflateParams")
     public void showProgressView() {
         if (!isProgressShown) {
             isProgressShown = true;
