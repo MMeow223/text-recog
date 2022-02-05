@@ -40,7 +40,6 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int listPosition, final int expandedListPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
-//        List<String> expandedListText = (List<String>) getChild(listPosition, expandedListPosition);
 
         ExpandableListDetailWrapper expandedListText = (ExpandableListDetailWrapper) getChild(listPosition, expandedListPosition);
 
@@ -49,14 +48,10 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
             LayoutInflater layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.list_item, null);
         }
-        ImageView expandedListItemImage = (ImageView) convertView
-                .findViewById(R.id.expandedListItemImage);
-        TextView expandedListItemDate = (TextView) convertView
-                .findViewById(R.id.expandedListItemDate);
-        TextView expandedListItemTime = (TextView) convertView
-                .findViewById(R.id.expandedListItemTime);
-        TextView expandedListItemA1C = (TextView) convertView
-                .findViewById(R.id.expandedListItemA1C);
+        ImageView expandedListItemImage = (ImageView) convertView.findViewById(R.id.expandedListItemImage);
+        TextView expandedListItemDate = (TextView) convertView.findViewById(R.id.expandedListItemDate);
+        TextView expandedListItemTime = (TextView) convertView.findViewById(R.id.expandedListItemTime);
+        TextView expandedListItemA1C = (TextView) convertView.findViewById(R.id.expandedListItemA1C);
 
         expandedListItemImage.setImageBitmap(expandedListText.getBitmap());
         expandedListItemDate.setText(expandedListText.getMonthAndDate());

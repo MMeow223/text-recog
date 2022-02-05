@@ -18,16 +18,19 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        //create table
         db.execSQL("CREATE TABLE SlipRecord(id INTEGER primary key autoincrement,datetime DATETIME,result TEXT,lot INTEGER,inst TEXT, test INTEGER,operator TEXT,image BLOB)");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        //drop table if exist
         db.execSQL("DROP TABLE if exists SlipRecord");
     }
 
     public Boolean insertSlipResultToDatabase(String datetime, String result, String lot, String inst, String test, String operator, byte[] image){
 
+        //get writable database
         SQLiteDatabase db = this.getWritableDatabase();
 
         if(checkDataExist(datetime)){
@@ -44,9 +47,7 @@ public class DBHelper extends SQLiteOpenHelper {
             contentValues.put("operator",operator);
             contentValues.put("image", image);
 
-            long insertResult = db.insert("SlipRecord",null,contentValues);
-
-            return insertResult != -1;
+            return (db.insert("SlipRecord",null,contentValues)) != -1;
         }
     }
 
@@ -57,6 +58,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         return cursor.getCount() > 0;
     }
+    
     public Cursor getDataFromDatabase(){
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -87,6 +89,11 @@ public class DBHelper extends SQLiteOpenHelper {
         return titleArray;
     }
 
+    // remove specific data from database
+    public void removeDataFromDatabase(String datetime){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("SlipRecord","datetime = ?",new String[]{datetime});
+    }
     //find image from database based on datetime
     public byte[] getImageFromDatabase(String datetime){
         SQLiteDatabase db = this.getWritableDatabase();

@@ -25,26 +25,31 @@ public class HistoryRecordActivity  extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         db = new DBHelper(this);
+        // set the layout
         setContentView(R.layout.record_history);
+        
+        // get the view from layout
         expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
         ImageButton backBtn = (ImageButton) findViewById(R.id.backButton);
+        
+        //get the data from database
         expandableListDetail = getDataFromDatabase();
         expandableListTitle = db.getAllYearForTitle();
         expandableListAdapter = new CustomExpandableListAdapter(this, expandableListTitle, expandableListDetail);
         expandableListView.setAdapter(expandableListAdapter);
 
+        // set the back button
         backBtn.setOnClickListener(v -> finish());
     }
 
+    // get the data from database
     public List<ExpandableListGroupWrapper> getDataFromDatabase() {
-//      HashMap<String, List<List<String>>> expandableListDetail = new HashMap<String, List<List<String>>>();
         List<ExpandableListGroupWrapper> expandableListDetail = new ArrayList<>();
         Cursor cursor =  db.getDataFromDatabase();
 
-
         List<String> everyYears = db.getAllYearForTitle();
 
-        //initially create a expandableListGroupWrapper for each year with empty list of courses
+        //initially create a expandableListGroupWrapper for each year with empty list 
         for (String year : everyYears) {
             expandableListDetail.add(new ExpandableListGroupWrapper(year, new ArrayList<>()));
         }

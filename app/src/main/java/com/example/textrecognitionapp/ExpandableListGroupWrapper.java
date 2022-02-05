@@ -3,7 +3,6 @@ package com.example.textrecognitionapp;
 import java.util.List;
 
 public class ExpandableListGroupWrapper {
-     //create a variable
     private final String year;
     private final List<ExpandableListDetailWrapper> list;
     //create a constructor
@@ -19,7 +18,7 @@ public class ExpandableListGroupWrapper {
         return this.list;
     }
 
-    //insert expandablelistdetailwrapper to list
+    // insert expandablelistdetailwrapper to list
     public void addExpandableListDetailWrapper(ExpandableListDetailWrapper expandableListDetailWrapper){
         this.list.add(expandableListDetailWrapper);
     }

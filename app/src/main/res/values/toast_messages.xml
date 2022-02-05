@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="rotate_phone_crash">Error: Try not to rotate your phone and take a picture again.</string>
+    <string name="no_text_found">Extract Fail: There is no text found.\n Please retake the picture.</string>
+    <string name="extract_success">Text extracted successfully</string>
+
+</resources>
