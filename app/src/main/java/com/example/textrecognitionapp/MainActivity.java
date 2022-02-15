@@ -3,10 +3,12 @@ package com.example.textrecognitionapp;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.Rect;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -18,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
     private String mCurrentPhotoPath;
     private boolean isProgressShown = false;
     private boolean isVerificationPass = false;
+    private Uri imageUri;
+    private String fileNameJPG;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,6 +145,8 @@ public class MainActivity extends AppCompatActivity {
                 ".jpg",   /* suffix */
                 storageDir      /* directory */
         );
+
+        this.fileNameJPG = imageFileName + ".jpg";
         // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
@@ -150,11 +157,13 @@ public class MainActivity extends AppCompatActivity {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         File f = new File(mCurrentPhotoPath);
         Uri contentUri = Uri.fromFile(f);
+        this.imageUri = contentUri;
+
         mediaScanIntent.setData(contentUri);
         this.sendBroadcast(mediaScanIntent);
     }
 
-    private void setPic() {
+    private void setPic()  {
         // Get the dimensions of the View
         int targetW = capturedImage.getWidth();
         int targetH = capturedImage.getHeight();
@@ -165,11 +174,14 @@ public class MainActivity extends AppCompatActivity {
 
         BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
 
+        System.out.print(mCurrentPhotoPath);
+
         int photoW = bmOptions.outWidth;
         int photoH = bmOptions.outHeight;
 
         // Determine how much to scale down the image
         int scaleFactor = Math.max(1, Math.min(photoW/targetW, photoH/targetH));
+//        int scaleFactor = Math.max(1, Math.min(photoW/targetW, photoH/targetH));
 
         // Decode the image file into a Bitmap sized to fill the View
         bmOptions.inJustDecodeBounds = false;
@@ -177,9 +189,73 @@ public class MainActivity extends AppCompatActivity {
         bmOptions.inPurgeable = true;
 
         imageBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        capturedImage.setImageBitmap(imageBitmap);
+
+        /////////////////////////
+        Bitmap rotatedBitmap = imageBitmap;
+
+        try{
+            File imageFile = new File(mCurrentPhotoPath);
+            ExifInterface ei = new ExifInterface(imageFile.getAbsolutePath());
+            int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+
+            switch(orientation) {
+
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    rotatedBitmap = rotateImage(imageBitmap,90);
+                    break;
+
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    rotatedBitmap = rotateImage(imageBitmap,180);
+                    break;
+
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    rotatedBitmap = rotateImage(imageBitmap,270);
+                    break;
+
+                case ExifInterface.ORIENTATION_NORMAL:
+                default:
+//                    rotatedBitmap = rotateImage(imageBitmap,90); // for debug
+                    rotatedBitmap = imageBitmap;
+            }
+        }
+        catch (Exception e) {
+            Toast.makeText(getApplicationContext(),  e.getMessage() , Toast.LENGTH_LONG).show();
+        }
+
+        /////////////////////////
+
+        capturedImage.setImageBitmap(rotatedBitmap);
 
     }
+    public int getCameraPhotoOrientation(Context context, Uri imageUri, String imagePath){
+        int rotate = 0;
+        try {
+            context.getContentResolver().notifyChange(imageUri, null);
+            File imageFile = new File(imagePath);
+
+            ExifInterface exif = new ExifInterface(imageFile.getAbsolutePath());
+            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    rotate = 270;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    rotate = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    rotate = 90;
+                    break;
+            }
+
+            Log.i("RotateImage", "Exif orientation: " + orientation);
+            Log.i("RotateImage", "Rotate value: " + rotate);
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(),  e.getMessage() , Toast.LENGTH_LONG).show();
+        }
+        return rotate;
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -219,13 +295,19 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private Bitmap rotateImage(Bitmap img) {
+//    private Bitmap rotateImage(Bitmap img) {
+//        Matrix matrix = new Matrix();
+//        matrix.postRotate(90);
+//        Bitmap rotatedImg = Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(), matrix, true);
+//        img.recycle();
+//        rotation += 90;
+//        return rotatedImg;
+//    }
+    private Bitmap rotateImage(Bitmap source, float angle) {
         Matrix matrix = new Matrix();
-        matrix.postRotate(90);
-        Bitmap rotatedImg = Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(), matrix, true);
-        img.recycle();
-        rotation += 90;
-        return rotatedImg;
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
     }
 
     private void removeElementBefore(){
@@ -286,7 +368,7 @@ public class MainActivity extends AppCompatActivity {
 
         // rotate and extract text from image again if no text is found
         if(words.stream().map(Object::toString).collect(Collectors.joining("")).equals("") && rotation<=360){
-            imageBitmapForProcess = rotateImage(imageBitmapForProcess);
+            imageBitmapForProcess = rotateImage(imageBitmapForProcess,90);
             extractTextFromImage();
         }
         else{
