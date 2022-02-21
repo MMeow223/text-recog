@@ -19,6 +19,13 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
     private final List<String> expandableListTitle;
     private final List<ExpandableListGroupWrapper> expandableListDetail;
 
+    /**
+     * Initialise CustomExpandableListAdapter
+     *
+     * @param context Activity
+     * @param expandableListTitle List<String>
+     * @param expandableListDetail List<ExpandableListGroupWrapper>
+     */
     public CustomExpandableListAdapter(Activity context, List<String> expandableListTitle,
                                        List<ExpandableListGroupWrapper> expandableListDetail) {
         this.context = context;
@@ -26,16 +33,41 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
         this.expandableListDetail = expandableListDetail;
 
     }
+
+    /**
+     * Get the child item of expandableListDetail
+     *
+     * @param listPosition int
+     * @param expandedListPosition int
+     * @return Object
+     */
     @Override
     public Object getChild(int listPosition, int expandedListPosition) {
-        //return child item of expandableListDetail
         return this.expandableListDetail.get(listPosition).getList().get(expandedListPosition);
     }
+
+    /**
+     * Get child item id
+     *
+     * @param listPosition int
+     * @param expandedListPosition int
+     * @return long
+     */
     @Override
     public long getChildId(int listPosition, int expandedListPosition) {
         return expandedListPosition;
     }
 
+    /**
+     * Create the child item view
+     *
+     * @param listPosition int
+     * @param expandedListPosition int
+     * @param isLastChild boolean
+     * @param convertView View
+     * @param parent ViewGroup
+     * @return View
+     */
     @SuppressLint("InflateParams")
     @Override
     public View getChildView(int listPosition, final int expandedListPosition,
@@ -67,28 +99,58 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
         return convertView;
     }
 
+    /**
+     * Get the number of children of expandableListDetail
+     *
+     * @param listPosition int
+     * @return int
+     */
     @Override
     public int getChildrenCount(int listPosition) {
-        // return number of child of expandableListDetail
         return this.expandableListDetail.get(listPosition).getList().size();
-
     }
 
+    /**
+     * Get all the groups in expandableListTitle
+     *
+     * @param listPosition int
+     * @return Object
+     */
     @Override
     public Object getGroup(int listPosition) {
         return this.expandableListTitle.get(listPosition);
     }
 
+    /**
+     * Get the number of groups in expandableListTitle
+     *
+     * @return int
+     */
     @Override
     public int getGroupCount() {
         return this.expandableListTitle.size();
     }
 
+    /**
+     * Get the group id
+     *
+     * @param listPosition int
+     * @return long
+     */
     @Override
     public long getGroupId(int listPosition) {
         return listPosition;
     }
 
+    /**
+     * Create the group view
+     *
+     * @param listPosition int
+     * @param isExpanded boolean
+     * @param convertView View
+     * @param parent ViewGroup
+     * @return View
+     */
     @SuppressLint("InflateParams")
     @Override
     public View getGroupView(int listPosition, boolean isExpanded,
@@ -105,11 +167,23 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
         return convertView;
     }
 
+    /**
+     * Set hasStableIds to falase
+     *
+     * @return boolean
+     */
     @Override
     public boolean hasStableIds() {
         return false;
     }
 
+    /**
+     * Set isChildSelectable to true
+     *
+     * @param listPosition int
+     * @param expandedListPosition int
+     * @return boolean
+     */
     @Override
     public boolean isChildSelectable(int listPosition, int expandedListPosition) {
         return true;

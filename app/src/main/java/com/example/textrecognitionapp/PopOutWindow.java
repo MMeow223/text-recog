@@ -10,6 +10,11 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 public class PopOutWindow extends Activity {
 
+    /**
+     * Initialise the activity
+     *
+     * @param savedInstanceState Bundle
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);

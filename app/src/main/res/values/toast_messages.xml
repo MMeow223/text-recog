@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="rotate_phone_crash">Error: Try not to rotate your phone and take a picture again.</string>
-    <string name="no_text_found">Extract Fail: There is no text found.\n Please retake the picture.</string>
-    <string name="extract_success">Text extracted successfully</string>
+    <string name="error_message_prefix">
+        Error:
+    </string>
+    <string name="rotate_phone_crash">
+        Error: Try not to rotate your phone and take a picture again.
+    </string>
+    <string name="no_text_found">
+        Extract Fail: There is no text found.\n Please retake the picture.
+    </string>
+    <string name="extract_success">
+        Text extracted successfully
+    </string>
+    <string name="invalid_record_found">
+        Submission Fail: Invalid record found, please make sure you slip is from \'Quo-Lab\' machine
+    </string>
 
 </resources>

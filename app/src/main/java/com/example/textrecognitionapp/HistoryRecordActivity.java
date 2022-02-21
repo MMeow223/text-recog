@@ -21,28 +21,38 @@ public class HistoryRecordActivity  extends AppCompatActivity {
     List<ExpandableListGroupWrapper> expandableListDetail;
 
 
+    /**
+     * Initialise the activity
+     *
+     * @param savedInstanceState Bundle
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         db = new DBHelper(this);
+
         // set the layout
         setContentView(R.layout.record_history);
         
         // get the view from layout
-        expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
+        this.expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
         ImageButton backBtn = (ImageButton) findViewById(R.id.backButton);
         
         //get the data from database
-        expandableListDetail = getDataFromDatabase();
-        expandableListTitle = db.getAllYearForTitle();
-        expandableListAdapter = new CustomExpandableListAdapter(this, expandableListTitle, expandableListDetail);
-        expandableListView.setAdapter(expandableListAdapter);
+        this.expandableListDetail = getDataFromDatabase();
+        this.expandableListTitle = db.getAllYearForTitle();
+        this.expandableListAdapter = new CustomExpandableListAdapter(this, this.expandableListTitle, this.expandableListDetail);
+        this.expandableListView.setAdapter(this.expandableListAdapter);
 
         // set the back button
         backBtn.setOnClickListener(v -> finish());
     }
 
-    // get the data from database
+    /**
+     * Get data from database
+     *
+     * @return List<ExpandableListGroupWrapper>
+     */
     public List<ExpandableListGroupWrapper> getDataFromDatabase() {
         List<ExpandableListGroupWrapper> expandableListDetail = new ArrayList<>();
         Cursor cursor =  db.getDataFromDatabase();
@@ -75,6 +85,7 @@ public class HistoryRecordActivity  extends AppCompatActivity {
         for (ExpandableListGroupWrapper expandableListGroupWrapper : expandableListDetail) {
             expandableListGroupWrapper.getList().sort((o1, o2) -> o2.getDatetime().compareTo(o1.getDatetime()));
         }
+
         return expandableListDetail;
     }
 }

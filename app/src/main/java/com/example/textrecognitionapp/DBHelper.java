@@ -16,18 +16,42 @@ public class DBHelper extends SQLiteOpenHelper {
         super(context,"Userdata.db",null,1);
     }
 
+    /**
+     * Initialise/Create the database
+     *
+     * @param db SQLiteDatabase
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         //create table
         db.execSQL("CREATE TABLE SlipRecord(id INTEGER primary key autoincrement,datetime DATETIME,result TEXT,lot INTEGER,inst TEXT, test INTEGER,operator TEXT,image BLOB)");
     }
 
+    /**
+     * Drop table if the table is exist
+     *
+     * @param db SQLiteDatabase
+     * @param oldVersion int
+     * @param newVersion int
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //drop table if exist
         db.execSQL("DROP TABLE if exists SlipRecord");
     }
 
+    /**
+     * Insert a record(slip result) to the database. Return true if success
+     *
+     * @param datetime String
+     * @param result String
+     * @param lot String
+     * @param inst String
+     * @param test String
+     * @param operator String
+     * @param image byte[]
+     * @return Boolean
+     */
     public Boolean insertSlipResultToDatabase(String datetime, String result, String lot, String inst, String test, String operator, byte[] image){
 
         //get writable database
@@ -51,6 +75,12 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Check if data exist in database
+     *
+     * @param datetime String
+     * @return Boolean
+     */
     public Boolean checkDataExist(String datetime){
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -58,13 +88,23 @@ public class DBHelper extends SQLiteOpenHelper {
 
         return cursor.getCount() > 0;
     }
-    
+
+    /**
+     * Get data from database
+     *
+     * @return Cursor
+     */
     public Cursor getDataFromDatabase(){
 
         SQLiteDatabase db = this.getWritableDatabase();
         return db.rawQuery("SELECT * FROM SlipRecord",null);
     }
 
+    /**
+     * Get all years for the title list
+     *
+     * @return List<String>
+     */
     public List<String> getAllYearForTitle(){
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -89,12 +129,22 @@ public class DBHelper extends SQLiteOpenHelper {
         return titleArray;
     }
 
-    // remove specific data from database
+    /**
+     * Remove specific data from database
+     *
+     * @param datetime String
+     */
     public void removeDataFromDatabase(String datetime){
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("SlipRecord","datetime = ?",new String[]{datetime});
     }
-    //find image from database based on datetime
+
+    /**
+     * Find image from database based on datetime
+     *
+     * @param datetime String
+     * @return byte[]
+     */
     public byte[] getImageFromDatabase(String datetime){
         SQLiteDatabase db = this.getWritableDatabase();
 

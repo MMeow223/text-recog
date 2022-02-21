@@ -7,39 +7,72 @@ public class ExpandableListDetailWrapper {
     private final byte[] image;
     private final String datetime;
     private final String result;
-    //
+
+    /**
+     * Constructor of ExpandableListDetailWrapper
+     *
+     * @param image byte[]
+     * @param datetime String
+     * @param result String
+     */
     public ExpandableListDetailWrapper(byte[] image, String datetime, String result){
         this.image = image;
         this.datetime = datetime;
         this.result = result;
     }
 
-    // Getter methods
-   public String getDatetime(){
+    /**
+     * Get datetime
+     *
+     * @return String
+     */
+    public String getDatetime(){
         return this.datetime;
-   }
-   public String getResult(){
-        return this.result;
-   }
+    }
 
-   //get date from datetime
+    /**
+     * Get result
+     *
+     * @return String
+     */
+    public String getResult(){
+        return this.result;
+    }
+
+    /**
+     * Get the date from datetime after separation
+     *
+     * @return String
+     */
     public String getDate(){
           String[] date = this.datetime.split(" ");
           return date[0];
     }
 
-    //get time from datetime
+    /**
+     * Get the time from datetime after separation
+     *
+     * @return String
+     */
     public String getTime(){
         String[] time = this.datetime.split(" ");
         return time[1];
     }
 
-    //convert byte[] to bitmap
+    /**
+     * Convert byte[] to bitmap
+     *
+     * @return Bitmap
+     */
     public Bitmap getBitmap(){
         return BitmapFactory.decodeByteArray(this.image, 0, this.image.length);
     }
 
-    //convert month of date into english month
+    /**
+     * Convert month of date into english format
+     *
+     * @return String
+     */
     public String getMonthAndDate(){
         String date = getDate();
         String[] month = date.split("/");
