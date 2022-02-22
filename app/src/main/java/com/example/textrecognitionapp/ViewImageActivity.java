@@ -8,7 +8,7 @@ import android.widget.ImageView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-public class PopOutWindow extends Activity {
+public class ViewImageActivity extends Activity {
 
     /**
      * Initialise the activity
@@ -21,7 +21,7 @@ public class PopOutWindow extends Activity {
         DBHelper db = new DBHelper(this);
 
         // choose the layout to display
-        setContentView(R.layout.image_overlay);
+        setContentView(R.layout.view_image_layout);
 
         // get each view from layout
         ConstraintLayout constrainLayout = findViewById(R.id.constrainLayout);

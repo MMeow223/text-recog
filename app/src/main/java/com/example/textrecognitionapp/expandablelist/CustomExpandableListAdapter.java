@@ -1,4 +1,4 @@
-package com.example.textrecognitionapp;
+package com.example.textrecognitionapp.expandablelist;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -10,6 +10,9 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.content.Intent;
+
+import com.example.textrecognitionapp.ViewImageActivity;
+import com.example.textrecognitionapp.R;
 
 import java.util.List;
 
@@ -78,7 +81,7 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
 
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.list_item, null);
+            convertView = layoutInflater.inflate(R.layout.list_view_layout_item, null);
         }
         ImageView expandedListItemImage = (ImageView) convertView.findViewById(R.id.expandedListItemImage);
         TextView expandedListItemDate = (TextView) convertView.findViewById(R.id.expandedListItemDate);
@@ -91,7 +94,7 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
         expandedListItemA1C.setText(expandedListText.getResult());
 
         convertView.setOnClickListener(view -> {
-            Intent intent = new Intent(context,PopOutWindow.class);
+            Intent intent = new Intent(context, ViewImageActivity.class);
             intent.putExtra("DISPLAY_IMAGE", expandedListText.getDatetime());
             context.startActivity(intent);
         });
@@ -159,7 +162,7 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) this.context.
                     getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.list_group, null);
+            convertView = layoutInflater.inflate(R.layout.list_view_layout_group, null);
         }
         TextView listTitleTextView = (TextView) convertView.findViewById(R.id.listTitle);
         listTitleTextView.setTypeface(null, Typeface.BOLD);

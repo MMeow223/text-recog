@@ -1,4 +1,4 @@
-package com.example.textrecognitionapp;
+package com.example.textrecognitionapp.expandablelist;
 
 import java.util.List;
 

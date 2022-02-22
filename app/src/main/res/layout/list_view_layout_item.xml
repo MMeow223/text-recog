@@ -13,7 +13,7 @@
             android:id="@+id/expandedListItemImage"
             android:layout_width="42dp"
             android:layout_height="42dp"
-            android:src="@drawable/testing_sample"
+            android:src="@drawable/sample_slip_record_image"
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -60,14 +60,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             />
-
-
-<!--    <TextView-->
-<!--        android:id="@+id/expandedListItem"-->
-<!--        android:layout_width="fill_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"-->
-<!--        android:paddingTop="10dp"-->
-<!--        android:paddingBottom="10dp" />-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 

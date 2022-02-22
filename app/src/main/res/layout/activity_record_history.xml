@@ -10,7 +10,7 @@
 
     <include
         android:id="@+id/include"
-        layout="@layout/history_record_toolbar_layout" />
+        layout="@layout/toolbar_layout_history_record" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/textDescription"

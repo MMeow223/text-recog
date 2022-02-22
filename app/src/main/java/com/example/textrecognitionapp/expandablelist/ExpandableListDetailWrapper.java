@@ -1,4 +1,4 @@
-package com.example.textrecognitionapp;
+package com.example.textrecognitionapp.expandablelist;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

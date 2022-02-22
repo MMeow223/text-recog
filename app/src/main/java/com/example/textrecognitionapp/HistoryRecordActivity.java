@@ -9,6 +9,10 @@ import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.textrecognitionapp.expandablelist.CustomExpandableListAdapter;
+import com.example.textrecognitionapp.expandablelist.ExpandableListDetailWrapper;
+import com.example.textrecognitionapp.expandablelist.ExpandableListGroupWrapper;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +36,7 @@ public class HistoryRecordActivity  extends AppCompatActivity {
         db = new DBHelper(this);
 
         // set the layout
-        setContentView(R.layout.record_history);
+        setContentView(R.layout.activity_record_history);
         
         // get the view from layout
         this.expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);

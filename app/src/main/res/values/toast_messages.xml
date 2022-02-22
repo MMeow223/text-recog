@@ -16,5 +16,10 @@
     <string name="invalid_record_found">
         Submission Fail: Invalid record found, please make sure you slip is from \'Quo-Lab\' machine
     </string>
-
+    <string name="success_upload">
+        Upload record to database successfully!
+    </string>
+    <string name="fail_upload_repeat">
+        Fail to upload record to database. Are you submitting a repeated slip?
+    </string>
 </resources>

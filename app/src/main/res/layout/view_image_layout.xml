@@ -17,14 +17,11 @@
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/testing_sample"
+            android:src="@drawable/sample_slip_record_image"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-<!--    android:adjustViewBounds="true"-->
-<!--    android:scaleType="centerCrop"-->
-    <!--    android:background="@drawable/overlay_background"-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

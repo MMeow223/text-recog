@@ -59,14 +59,16 @@ public class MainActivity extends AppCompatActivity {
             "Inst ID", "Inst ID ", "Inst ID:",
             "Test ID", "Test ID:",
             "Operator", "Operator:"};
+
     private Bitmap imageBitmap;
     private Bitmap imageBitmapForProcess;
+    private int rotation = 0;
+    private String mCurrentPhotoPath;
+
     private ViewGroup progressView;
     private ImageView capturedImage;
     private DBHelper db;
     private ArrayList<String> words = new ArrayList<>();
-    private int rotation = 0;
-    private String mCurrentPhotoPath;
     private boolean isProgressShown = false;
     private boolean isQuoLabMachine = false;
 
@@ -717,9 +719,9 @@ public class MainActivity extends AppCompatActivity {
                 for (int i = 0; i < textInputLayouts.size(); i++) {
                     Objects.requireNonNull(textInputLayouts.get(i).getEditText()).setText("");
                 }
-                Toast.makeText(getApplicationContext(), "Upload record to database successfully!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.success_upload), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getApplicationContext(), "Fail to upload record to database. Are you submitting a repeated slip?", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.fail_upload_repeat), Toast.LENGTH_SHORT).show();
             }
         });
 
