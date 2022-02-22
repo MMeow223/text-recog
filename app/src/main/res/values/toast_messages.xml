@@ -22,4 +22,8 @@
     <string name="fail_upload_repeat">
         Fail to upload record to database. Are you submitting a repeated slip?
     </string>
+    <string name="invalid_format_found">
+        Fail to upload record to database. Please match the required format before submit!d
+    </string>
+
 </resources>

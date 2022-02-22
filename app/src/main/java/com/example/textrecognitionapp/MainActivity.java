@@ -70,7 +70,8 @@ public class MainActivity extends AppCompatActivity {
     private DBHelper db;
     private ArrayList<String> words = new ArrayList<>();
     private boolean isProgressShown = false;
-    private boolean isQuoLabMachine = false;
+    private boolean isQuoLabMachine = true;
+//    private boolean isQuoLabMachine = false;
 
     /**
      * Initialise the activity
@@ -704,16 +705,16 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Confirm submit dialog box
      */
-    private void confirmSubmitWithEmptyFieldDialogBox() {
+    private void confirmSubmitDialogBox(boolean haveEmpty) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("There are empty field(s) found. Proceed submit?");
+        String dialogText = (haveEmpty)?"There are empty field(s) found. Proceed submit?":"Confirm submit? Please make sure all field are filled correctly.";
+        builder.setMessage(dialogText);
         builder.setCancelable(true);
 
-        // Uploads data to database (To be implemented) & resets image and text input layout values to default values
         builder.setPositiveButton("Proceed", (dialog, which) -> {
             dialog.cancel();
 
-            boolean submitSuccess = submitRecordToDatabase();
+            boolean submitSuccess = submitRecordToDatabase(); // submit to database
             if (submitSuccess) {
                 capturedImage.setImageResource(R.drawable.placeholder);
                 for (int i = 0; i < textInputLayouts.size(); i++) {
@@ -739,10 +740,70 @@ public class MainActivity extends AppCompatActivity {
         if (!this.isQuoLabMachine) {
             Toast.makeText(getApplicationContext(), getString(R.string.invalid_record_found), Toast.LENGTH_LONG).show();
         } else {
-            confirmSubmitWithEmptyFieldDialogBox();
+            if(checkIfTextInputLayoutFieldValueAreValid()){
+                confirmSubmitDialogBox(checkIfAnyEmptyTextInputLayoutField());
+            }
+            else{
+                Toast.makeText(getApplicationContext(), getString(R.string.invalid_format_found), Toast.LENGTH_LONG).show();
+            }
         }
     }
 
+    /**
+     * Return true if there is empty field found
+     *
+     * @return boolean
+     */
+    private boolean checkIfAnyEmptyTextInputLayoutField(){
+
+        for(TextInputLayout til : this.textInputLayouts){
+            if(til.getEditText().getText().toString().equals("")){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check if the filled text are fulfil the required format
+     *
+     * @return
+     */
+    private boolean checkIfTextInputLayoutFieldValueAreValid(){
+
+        String datetime = textInputLayouts.get(0).getEditText().getText().toString();
+        String a1cResult = textInputLayouts.get(1).getEditText().getText().toString();
+        String lotView = textInputLayouts.get(2).getEditText().getText().toString();
+        String instId = textInputLayouts.get(3).getEditText().getText().toString();
+        String testId = textInputLayouts.get(4).getEditText().getText().toString();
+
+        if(!(datetime.equals(""))){
+            if(!Regex.DatetimePattern(datetime)){
+                return false;
+            }
+        }
+        if(!(a1cResult.equals(""))){
+            if(!Regex.A1CResultPattern(a1cResult)){
+                return false;
+            }
+        }
+        if(!(lotView.equals(""))){
+            if(!Regex.LotViewPattern(lotView)){
+                return false;
+            }
+        }
+        if(!(instId.equals(""))){
+            if(!Regex.InstIdPattern(instId)){
+                return false;
+            }
+        }
+        if(!(testId.equals(""))){
+            if(!Regex.TestIdPattern(testId)){
+                return false;
+            }
+        }
+        return true;
+    }
 
     /**
      * Submit record to database
