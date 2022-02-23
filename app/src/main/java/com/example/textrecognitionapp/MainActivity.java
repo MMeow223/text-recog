@@ -107,17 +107,17 @@ public class MainActivity extends AppCompatActivity {
         this.textInputLayouts.add(testIdView);
         this.textInputLayouts.add(operatorView);
 
-        // Calls camera activity function when 'Take Picture' button is pressed
+        // Trigger camera activity function when 'Take Picture' button is pressed
         captureImageBtn.setOnClickListener(v -> {
             this.isQuoLabMachine = false;
             this.rotation = 0;
             dispatchTakePictureIntent();
         });
 
-        // Submit data to database
+        // Trigger submit when submit button is clicked
         submitBtn.setOnClickListener(v -> handleValidationAndSubmission());
 
-        // Calls history activity function when 'History' button is pressed
+        // Trigger history activity function when 'History' button is pressed
         historyRecordBtn.setOnClickListener(v -> startActivity(
                 new Intent(MainActivity.this, HistoryRecordActivity.class))
         );
@@ -707,7 +707,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void confirmSubmitDialogBox(boolean haveEmpty) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        String dialogText = (haveEmpty)?"There are empty field(s) found. Proceed submit?":"Confirm submit? Please make sure all field are filled correctly.";
+        String dialogText = (haveEmpty) ? "There are empty field(s) found. Proceed submit?" : "Confirm submit? Please make sure all field are filled correctly.";
         builder.setMessage(dialogText);
         builder.setCancelable(true);
 
@@ -740,10 +740,9 @@ public class MainActivity extends AppCompatActivity {
         if (!this.isQuoLabMachine) {
             Toast.makeText(getApplicationContext(), getString(R.string.invalid_record_found), Toast.LENGTH_LONG).show();
         } else {
-            if(checkIfTextInputLayoutFieldValueAreValid()){
+            if (checkIfTextInputLayoutFieldValueAreValid()) {
                 confirmSubmitDialogBox(checkIfAnyEmptyTextInputLayoutField());
-            }
-            else{
+            } else {
                 Toast.makeText(getApplicationContext(), getString(R.string.invalid_format_found), Toast.LENGTH_LONG).show();
             }
         }
@@ -754,10 +753,10 @@ public class MainActivity extends AppCompatActivity {
      *
      * @return boolean
      */
-    private boolean checkIfAnyEmptyTextInputLayoutField(){
+    private boolean checkIfAnyEmptyTextInputLayoutField() {
 
-        for(TextInputLayout til : this.textInputLayouts){
-            if(til.getEditText().getText().toString().equals("")){
+        for (TextInputLayout til : this.textInputLayouts) {
+            if (til.getEditText().getText().toString().equals("")) {
                 return true;
             }
         }
@@ -769,7 +768,7 @@ public class MainActivity extends AppCompatActivity {
      *
      * @return
      */
-    private boolean checkIfTextInputLayoutFieldValueAreValid(){
+    private boolean checkIfTextInputLayoutFieldValueAreValid() {
 
         String datetime = textInputLayouts.get(0).getEditText().getText().toString();
         String a1cResult = textInputLayouts.get(1).getEditText().getText().toString();
@@ -777,30 +776,28 @@ public class MainActivity extends AppCompatActivity {
         String instId = textInputLayouts.get(3).getEditText().getText().toString();
         String testId = textInputLayouts.get(4).getEditText().getText().toString();
 
-        if(!(datetime.equals(""))){
-            if(!Regex.DatetimePattern(datetime)){
+        if (!(datetime.equals(""))) {
+            if (!Regex.DatetimePattern(datetime)) {
                 return false;
             }
         }
-        if(!(a1cResult.equals(""))){
-            if(!Regex.A1CResultPattern(a1cResult)){
+        if (!(a1cResult.equals(""))) {
+            if (!Regex.A1CResultPattern(a1cResult)) {
                 return false;
             }
         }
-        if(!(lotView.equals(""))){
-            if(!Regex.LotViewPattern(lotView)){
+        if (!(lotView.equals(""))) {
+            if (!Regex.LotViewPattern(lotView)) {
                 return false;
             }
         }
-        if(!(instId.equals(""))){
-            if(!Regex.InstIdPattern(instId)){
+        if (!(instId.equals(""))) {
+            if (!Regex.InstIdPattern(instId)) {
                 return false;
             }
         }
-        if(!(testId.equals(""))){
-            if(!Regex.TestIdPattern(testId)){
-                return false;
-            }
+        if (!(testId.equals(""))) {
+            return Regex.TestIdPattern(testId);
         }
         return true;
     }
